@@ -1,11 +1,937 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tacada Solidária — Torcida com Chances</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --field-dark:#0E2A1C;
+    --field:#16452D;
+    --field-2:#1F5C3D;
+    --chalk:#F4F1E6;
+    --clay:#B5651D;
+    --amber:#FFC94A;
+    --candy-red:#E4483A;
+    --ink:#0A1811;
+    --line: rgba(244,241,230,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% -10%, rgba(255,201,74,0.10), transparent 45%),
+      linear-gradient(180deg, var(--field-dark) 0%, var(--ink) 100%);
+    color:var(--chalk);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:24px 18px 40px;}
+  .hero{
+    text-align:center;
+    padding:26px 10px 20px;
+    position:relative;
+  }
+  .hero .eyebrow{
+    font-family:'Space Mono',monospace;
+    letter-spacing:.22em;
+    font-size:11px;
+    color:var(--amber);
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .hero h1{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    font-size:clamp(34px,8vw,54px);
+    letter-spacing:.01em;
+    margin:0;
+    line-height:0.95;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.25);
+  }
+  .hero h1 span{color:var(--amber);}
+  .hero p.sub{
+    font-size:13px;
+    color:rgba(244,241,230,0.65);
+    margin-top:10px;
+  }
+  .tabs{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    margin:18px 0 22px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:0;
+  }
+  .tab-btn{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    background:none;
+    border:none;
+    color:rgba(244,241,230,0.55);
+    padding:10px 16px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    transition:.15s;
+  }
+  .tab-btn.active{color:var(--amber);border-bottom-color:var(--amber);}
+  .tab-btn:hover{color:var(--chalk);}
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:16px;
+  }
+  .card h2{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    font-size:20px;
+    letter-spacing:.01em;
+    margin:0 0 4px;
+    color:var(--chalk);
+  }
+  .card .hint{font-size:12.5px;color:rgba(244,241,230,0.55);margin:0 0 16px;}
+  label{
+    display:block;
+    font-family:'Space Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:rgba(244,241,230,0.55);
+    margin-bottom:6px;
+  }
+  input[type=text],input[type=number],input[type=password]{
+    width:100%;
+    background:rgba(0,0,0,0.25);
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--chalk);
+    padding:11px 12px;
+    font-family:'Work Sans',sans-serif;
+    font-size:15px;
+    margin-bottom:14px;
+  }
+  input:focus{outline:2px solid var(--amber);outline-offset:1px;}
+  .btn{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    border:none;
+    border-radius:8px;
+    padding:12px 18px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.15s;
+  }
+  .btn-primary{background:var(--amber);color:var(--ink);}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-primary:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-outline{background:none;border:1px solid var(--line);color:var(--chalk);}
+  .btn-outline:hover{border-color:var(--amber);color:var(--amber);}
+  .btn-outline:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-danger{background:var(--candy-red);color:var(--chalk);}
+  .btn-danger:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-block{width:100%;}
+  .row{display:flex;gap:10px;}
+  .row > *{flex:1;}
+  .scoreboard{
+    background:var(--ink);
+    border:1px solid rgba(255,201,74,0.25);
+    border-radius:10px;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  .scoreboard .lbl{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,230,0.55);}
+  .flip{
+    font-family:'Space Mono',monospace;
+    font-weight:700;
+    font-size:30px;
+    color:var(--amber);
+    letter-spacing:.03em;
+  }
+  .flip small{font-size:14px;color:rgba(255,201,74,0.7);margin-left:4px;}
+  .match-vs{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .pair-box{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+    cursor:pointer;
+    transition:.15s;
+    background:rgba(255,255,255,0.02);
+  }
+  .pair-box:hover{border-color:var(--amber);}
+  .pair-box.selected{border-color:var(--amber);background:rgba(255,201,74,0.08);}
+  .pair-box .pname{font-family:'Anton',sans-serif;font-size:17px;}
+  .pair-box .pool{font-family:'Space Mono',monospace;font-size:11px;color:rgba(244,241,230,0.55);margin-top:6px;}
+  .vs-tag{font-family:'Anton',sans-serif;color:var(--clay);font-size:14px;}
+  .empty{
+    text-align:center;
+    padding:30px 10px;
+    color:rgba(244,241,230,0.55);
+    font-size:14px;
+  }
+  .empty .big{font-size:30px;margin-bottom:8px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{
+    font-family:'Space Mono',monospace;
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    text-align:left;
+    color:rgba(244,241,230,0.5);
+    padding:8px 6px;
+    border-bottom:1px solid var(--line);
+  }
+  td{padding:9px 6px;border-bottom:1px solid rgba(244,241,230,0.06);}
+  tr:last-child td{border-bottom:none;}
+  .tag{
+    display:inline-block;
+    font-family:'Space Mono',monospace;
+    font-size:10px;
+    padding:2px 7px;
+    border-radius:20px;
+    text-transform:uppercase;
+  }
+  .tag-a{background:rgba(255,201,74,0.15);color:var(--amber);}
+  .tag-b{background:rgba(228,72,58,0.18);color:#ff8478;}
+  .tag-win{background:rgba(255,201,74,0.18);color:var(--amber);}
+  .tag-lose{background:rgba(228,72,58,0.18);color:#ff8478;}
+  .tag-refund{background:rgba(244,241,230,0.10);color:rgba(244,241,230,0.7);}
+  .msg{
+    font-size:13px;
+    padding:10px 12px;
+    border-radius:8px;
+    margin-bottom:14px;
+  }
+  .msg-error{background:rgba(228,72,58,0.15);color:#ff9d94;border:1px solid rgba(228,72,58,0.3);}
+  .msg-ok{background:rgba(255,201,74,0.12);color:var(--amber);border:1px solid rgba(255,201,74,0.3);}
+  .divider{height:1px;background:var(--line);margin:18px 0;}
+  .rank-1{color:var(--amber);}
+  .foot-note{text-align:center;font-size:11px;color:rgba(244,241,230,0.35);margin-top:30px;font-family:'Space Mono',monospace;}
+  .loading{text-align:center;padding:60px 10px;color:rgba(244,241,230,0.5);font-family:'Space Mono',monospace;font-size:12px;}
+  .pin-gate{max-width:280px;margin:40px auto;text-align:center;}
+  .close-tag{font-family:'Space Mono',monospace;font-size:11px;color:rgba(244,241,230,0.4);}
+  .section-title{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin:22px 0 10px;
+  }
+  @keyframes popIn{
+    0%{transform:scale(0.72);opacity:0;}
+    60%{transform:scale(1.04);opacity:1;}
+    100%{transform:scale(1);opacity:1;}
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);}
+    60%{transform:translateX(-4px);}
+    80%{transform:translateX(4px);}
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(6px);opacity:0;}
+    100%{transform:translateY(0);opacity:1;}
+  }
+  .result-banner{
+    border-radius:14px;
+    padding:22px 20px;
+    margin-bottom:16px;
+    text-align:center;
+    animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .result-banner.win{
+    background:linear-gradient(180deg, rgba(255,201,74,0.24), rgba(255,201,74,0.05));
+    border:1px solid rgba(255,201,74,0.55);
+    box-shadow:0 0 30px rgba(255,201,74,0.15);
+  }
+  .result-banner.lose{
+    background:linear-gradient(180deg, rgba(228,72,58,0.20), rgba(228,72,58,0.04));
+    border:1px solid rgba(228,72,58,0.4);
+    animation:popIn .5s cubic-bezier(.34,1.56,.64,1), shake .5s ease .5s;
+  }
+  .result-banner.neutral{
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--line);
+  }
+  .result-banner .big-emoji{font-size:42px;margin-bottom:6px;animation:floatUp .6s ease;}
+  .result-banner h3{font-family:'Anton',sans-serif;font-size:23px;margin:0 0 10px;letter-spacing:.01em;}
+  .result-banner ul{list-style:none;padding:0;margin:0 0 16px;font-size:13.5px;text-align:left;}
+  .result-banner li{
+    background:rgba(0,0,0,0.15);
+    border-radius:8px;
+    padding:9px 12px;
+    margin-bottom:6px;
+    line-height:1.4;
+  }
+  .result-banner li:last-child{margin-bottom:0;}
+</style>
 </head>
 <body>
-    <h1>teste</h1>
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Evento &middot; Jogo de Taco</div>
+    <h1>TACADA<br><span>SOLIDÁRIA</span></h1>
+    <p class="sub">Arquibancada oficial de torcida com chances</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="torcida">Torcida</button>
+    <button class="tab-btn" data-tab="admin">Painel Admin</button>
+  </div>
+
+  <div id="app"><div class="loading">carregando placar...</div></div>
+
+  <div class="foot-note">Vários confrontos podem rolar ao mesmo tempo &middot; as chances só são entregues no final do evento</div>
+</div>
+
+<script>
+const STORAGE_KEY = 'tacada_solidaria_state';
+const DEFAULT_ADMIN_PIN = '@Tacada!';
+let state = null;
+let activeTab = 'torcida';
+let session = null; // {key, name, sala}
+let adminUnlocked = false;
+let loginMsg = '';
+let adminMsg = '';
+let newPairA = '';
+let newPairB = '';
+let loginName = '';
+let loginSala = '';
+let adminPinVal = '';
+let initialSaldoVal = null;
+
+// estado de UI por confronto (keyed by matchId)
+let selectedPairByMatch = {};
+let betAmountByMatch = {};
+let betMsgByMatch = {};
+let submittingByMatch = {}; // trava contra clique duplo / envio duplicado
+let submittingGlobal = {}; // trava para ações únicas do admin (abrir confronto, fechar, etc.)
+
+function defaultState(){
+  return {
+    config: { initialSaldo: 3, adminPin: DEFAULT_ADMIN_PIN, nextMatchId: 1, betsLocked: false },
+    participants: {},
+    matches: [],
+    bets: []
+  };
+}
+
+async function loadState(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    state = res && res.value ? JSON.parse(res.value) : defaultState();
+    // garante que configs novas existam mesmo em estados salvos antigos
+    if(!state.config.adminPin) state.config.adminPin = DEFAULT_ADMIN_PIN;
+    if(typeof state.config.betsLocked !== 'boolean') state.config.betsLocked = false;
+    if(!state.config.nextMatchId) state.config.nextMatchId = 1;
+    delete state.config.currentMatchId; // migração do formato antigo (1 confronto só)
+    // garante que participantes antigos ganhem o campo de histórico
+    Object.values(state.participants).forEach(p => {
+      if(!Array.isArray(p.history)) p.history = [];
+    });
+  }catch(e){
+    state = defaultState();
+  }
+}
+
+async function saveState(){
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify(state), true);
+  }catch(e){
+    console.error('erro ao salvar', e);
+  }
+}
+
+function keyFor(name, sala){
+  return (name.trim().toLowerCase()) + '|' + (sala.trim().toLowerCase());
+}
+
+function openMatches(){
+  return state.matches.filter(m => m.status === 'open');
+}
+
+function fmt(n){ return (n<0?'':'') + n; }
+
+// ---------- RENDER ----------
+function render(){
+  const app = document.getElementById('app');
+  if(!state){ app.innerHTML = '<div class="loading">carregando placar...</div>'; return; }
+  app.innerHTML = activeTab === 'torcida' ? renderTorcida() : renderAdmin();
+  attachHandlers();
+}
+
+function renderResultBanner(p){
+  const pending = (p.history || []).filter(h => !h.seen);
+  if(!pending.length) return '';
+
+  const wins = pending.filter(h => h.result === 'won');
+  const losses = pending.filter(h => h.result === 'lost');
+  const refunds = pending.filter(h => h.result === 'refund');
+
+  let html = '';
+
+  if(wins.length){
+    html += `
+    <div class="result-banner win">
+      <div class="big-emoji">🎉</div>
+      <h3>Você GANHOU!</h3>
+      <ul>
+        ${wins.map(h => {
+          const myName = h.myPair === 'A' ? h.pairA : h.pairB;
+          const otherName = h.myPair === 'A' ? h.pairB : h.pairA;
+          return `<li>Torceu para <strong>${escapeHtml(myName)}</strong> contra ${escapeHtml(otherName)} — ganhou <strong>${h.payout} chances</strong>!</li>`;
+        }).join('')}
+      </ul>
+      <button class="btn btn-primary btn-block" data-dismiss-results="won">Show de bola! 🏆</button>
+    </div>`;
+  }
+
+  if(losses.length){
+    html += `
+    <div class="result-banner lose">
+      <div class="big-emoji">😔</div>
+      <h3>Dessa vez não deu...</h3>
+      <ul>
+        ${losses.map(h => {
+          const myName = h.myPair === 'A' ? h.pairA : h.pairB;
+          const winnerName = h.winnerPair === 'A' ? h.pairA : h.pairB;
+          return `<li>Torceu para <strong>${escapeHtml(myName)}</strong>, mas quem venceu foi <strong>${escapeHtml(winnerName)}</strong>. Você perdeu ${h.amount} chances.</li>`;
+        }).join('')}
+      </ul>
+      <button class="btn btn-outline btn-block" data-dismiss-results="lost">Entendi</button>
+    </div>`;
+  }
+
+  if(refunds.length){
+    html += `
+    <div class="result-banner neutral">
+      <div class="big-emoji">↩️</div>
+      <h3>Chances devolvidas</h3>
+      <ul>
+        ${refunds.map(h => `<li>Ninguém torceu para a dupla vencedora em <strong>${escapeHtml(h.pairA)} vs ${escapeHtml(h.pairB)}</strong> — suas ${h.amount} chances voltaram para o seu saldo.</li>`).join('')}
+      </ul>
+      <button class="btn btn-outline btn-block" data-dismiss-results="refund">Entendi</button>
+    </div>`;
+  }
+
+  return html;
+}
+
+function renderHistoryCard(p){
+  const hist = (p.history || []).slice().sort((a,b) => b.ts - a.ts);
+  if(!hist.length) return '';
+  const rows = hist.map(h => {
+    const myName = h.myPair === 'A' ? h.pairA : h.pairB;
+    const otherName = h.myPair === 'A' ? h.pairB : h.pairA;
+    let tag;
+    if(h.result === 'won') tag = `<span class="tag tag-win">Ganhou +${h.payout}</span>`;
+    else if(h.result === 'lost') tag = `<span class="tag tag-lose">Perdeu -${h.amount}</span>`;
+    else tag = `<span class="tag tag-refund">Devolvido</span>`;
+    return `<tr>
+      <td>${escapeHtml(myName)} <span class="close-tag">vs ${escapeHtml(otherName)}</span></td>
+      <td>${h.amount}</td>
+      <td>${tag}</td>
+    </tr>`;
+  }).join('');
+  return `
+  <div class="card">
+    <h2>Seu histórico</h2>
+    <p class="hint">Todos os confrontos que você já torceu, com o resultado de cada um.</p>
+    <table><thead><tr><th>Confronto</th><th>Chances</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table>
+  </div>`;
+}
+
+function renderTorcida(){
+  if(!session){
+    return `
+    <div class="card">
+      <h2>Entrar na arquibancada</h2>
+      <p class="hint">Digite seu nome e sua sala para começar a torcer com suas chances.</p>
+      ${loginMsg ? `<div class="msg msg-error">${loginMsg}</div>` : ''}
+      <label>Nome</label>
+      <input type="text" id="in-name" placeholder="Seu nome" value="${escapeHtml(loginName)}" />
+      <label>Sala</label>
+      <input type="text" id="in-sala" placeholder="Ex: 9ºA" value="${escapeHtml(loginSala)}" />
+      <button class="btn btn-primary btn-block" id="btn-login">Entrar</button>
+    </div>`;
+  }
+
+  const p = state.participants[session.key];
+  const matches = openMatches();
+
+  const lockedBanner = state.config.betsLocked ? `<div class="msg msg-error">⏸ A torcida está pausada pela organização. Aguarde a liberação.</div>` : '';
+
+  let matchesHtml = '';
+  if(!matches.length){
+    matchesHtml = `<div class="card"><div class="empty"><div class="big">⏳</div>Aguardando a organização abrir um confronto.</div></div>`;
+  } else {
+    matchesHtml = matches.map(m => {
+      const sel = selectedPairByMatch[m.id] || null;
+      const amt = betAmountByMatch[m.id] !== undefined ? betAmountByMatch[m.id] : '';
+      const msg = betMsgByMatch[m.id] || '';
+      const disabled = state.config.betsLocked;
+      const busy = !!submittingByMatch[m.id];
+      return `
+      <div class="card">
+        <h2>Confronto</h2>
+        <p class="hint">Escolha uma dupla e torça com quantas chances quiser (até o seu saldo).</p>
+        ${msg ? `<div class="msg ${msg.startsWith('✓') ? 'msg-ok':'msg-error'}">${msg}</div>` : ''}
+        <div class="match-vs">
+          <div class="pair-box ${sel==='A'?'selected':''}" data-pair="A" data-match-id="${m.id}">
+            <div class="pname">${escapeHtml(m.pairA)}</div>
+            <div class="pool">${m.poolA} chances na torcida</div>
+          </div>
+          <div class="vs-tag">VS</div>
+          <div class="pair-box ${sel==='B'?'selected':''}" data-pair="B" data-match-id="${m.id}">
+            <div class="pname">${escapeHtml(m.pairB)}</div>
+            <div class="pool">${m.poolB} chances na torcida</div>
+          </div>
+        </div>
+        <label>Quantidade de chances</label>
+        <input type="number" id="bet-amount-${m.id}" min="1" max="${p.saldo}" placeholder="Ex: 2" value="${escapeHtml(amt)}" ${disabled||busy?'disabled':''} />
+        <button class="btn btn-primary btn-block" data-bet-match-id="${m.id}" ${p.saldo<=0 || disabled || busy?'disabled':''}>${busy ? 'Enviando...' : (disabled ? 'Torcida pausada' : 'Confirmar torcida')}</button>
+      </div>`;
+    }).join('');
+  }
+
+  return `
+    <div class="scoreboard">
+      <div><div class="lbl">Jogador(a)</div><div style="font-size:14px;margin-top:2px;">${escapeHtml(p.name)} <span class="close-tag">· ${escapeHtml(p.sala)}</span></div></div>
+      <div style="text-align:right;"><div class="lbl">Seu saldo</div><div class="flip">${p.saldo}<small>chances</small></div></div>
+    </div>
+    ${renderResultBanner(p)}
+    ${lockedBanner}
+    ${matchesHtml}
+    ${renderHistoryCard(p)}
+  `;
+}
+
+function renderAdmin(){
+  if(!adminUnlocked){
+    return `
+    <div class="card pin-gate">
+      <h2>Acesso restrito</h2>
+      <p class="hint">Digite a senha da organização para continuar.</p>
+      ${adminMsg ? `<div class="msg msg-error">${adminMsg}</div>` : ''}
+      <input type="password" id="admin-pin-input" placeholder="Senha" value="${escapeHtml(adminPinVal)}" />
+      <button class="btn btn-primary btn-block" id="btn-admin-unlock">Entrar</button>
+    </div>`;
+  }
+
+  const matches = openMatches();
+
+  const lockCard = `
+    <div class="card">
+      <h2>Controle da torcida</h2>
+      <p class="hint">${state.config.betsLocked ? '⏸ Torcida pausada — ninguém consegue torcer ou trocar de dupla agora.' : '▶ Torcida liberada — participantes podem torcer normalmente.'}</p>
+      <button class="btn btn-block ${state.config.betsLocked ? 'btn-primary' : 'btn-danger'}" id="btn-toggle-lock" ${submittingGlobal['toggle-lock']?'disabled':''}>${state.config.betsLocked ? 'Liberar torcida' : 'Pausar torcida'}</button>
+    </div>
+  `;
+
+  const openMatchesHtml = matches.map(m => {
+    const bets = state.bets.filter(b => b.matchId === m.id);
+    const betRows = bets.map(b => {
+      const p = state.participants[b.key];
+      return `<tr>
+        <td>${escapeHtml(p ? p.name : '?')}</td>
+        <td>${escapeHtml(p ? p.sala : '?')}</td>
+        <td><span class="tag ${b.pair==='A'?'tag-a':'tag-b'}">${b.pair==='A'?escapeHtml(m.pairA):escapeHtml(m.pairB)}</span></td>
+        <td>${b.amount}</td>
+      </tr>`;
+    }).join('');
+
+    const busy = !!submittingGlobal['close-' + m.id];
+
+    return `
+    <div class="card">
+      <h2>${escapeHtml(m.pairA)} <span class="vs-tag">VS</span> ${escapeHtml(m.pairB)}</h2>
+      <p class="hint">Feche o confronto quando o jogo terminar para distribuir as chances automaticamente.</p>
+      <div class="match-vs">
+        <div class="pair-box" style="cursor:default;">
+          <div class="pname">${escapeHtml(m.pairA)}</div>
+          <div class="pool">${m.poolA} chances</div>
+        </div>
+        <div class="vs-tag">VS</div>
+        <div class="pair-box" style="cursor:default;">
+          <div class="pname">${escapeHtml(m.pairB)}</div>
+          <div class="pool">${m.poolB} chances</div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn btn-outline" data-close-winner="A" data-match-id="${m.id}" ${busy?'disabled':''}>Dupla A venceu</button>
+        <button class="btn btn-outline" data-close-winner="B" data-match-id="${m.id}" ${busy?'disabled':''}>Dupla B venceu</button>
+      </div>
+      <div class="divider"></div>
+      <div class="section-title">Torcida registrada (${bets.length})</div>
+      ${bets.length ? `<table><thead><tr><th>Nome</th><th>Sala</th><th>Dupla</th><th>Chances</th></tr></thead><tbody>${betRows}</tbody></table>` : '<p class="hint">Ninguém torceu ainda.</p>'}
+    </div>`;
+  }).join('');
+
+  const newMatchHtml = `
+    <div class="card">
+      <h2>Abrir novo confronto</h2>
+      <p class="hint">Digite o nome das duas duplas. Você pode ter vários confrontos abertos ao mesmo tempo.</p>
+      ${adminMsg ? `<div class="msg msg-error">${adminMsg}</div>` : ''}
+      <div class="row">
+        <div><label>Dupla A</label><input type="text" id="new-pair-a" value="${escapeHtml(newPairA)}" placeholder="Ex: Dupla 1" /></div>
+        <div><label>Dupla B</label><input type="text" id="new-pair-b" value="${escapeHtml(newPairB)}" placeholder="Ex: Dupla 2" /></div>
+      </div>
+      <button class="btn btn-primary btn-block" id="btn-open-match" ${submittingGlobal['open-match']?'disabled':''}>${submittingGlobal['open-match']?'Abrindo...':'Abrir confronto'}</button>
+    </div>
+  `;
+
+  const finished = state.matches.filter(x => x.status === 'closed').slice().reverse();
+  const finishedHtml = finished.length ? `
+    <div class="card">
+      <h2>Histórico de confrontos</h2>
+      <table><thead><tr><th>Dupla A</th><th>Dupla B</th><th>Venceu</th></tr></thead><tbody>
+      ${finished.map(f => `<tr><td>${escapeHtml(f.pairA)}</td><td>${escapeHtml(f.pairB)}</td><td><span class="tag ${f.winner==='A'?'tag-a':'tag-b'}">${f.winner==='A'?escapeHtml(f.pairA):escapeHtml(f.pairB)}</span></td></tr>`).join('')}
+      </tbody></table>
+    </div>` : '';
+
+  const ranking = Object.values(state.participants).slice().sort((a,b)=>b.saldo-a.saldo);
+  const rankingHtml = `
+    <div class="card">
+      <h2>Placar final (chances a entregar)</h2>
+      <p class="hint">Visão exclusiva da organização — nome, sala e saldo de cada participante.</p>
+      ${ranking.length ? `<table><thead><tr><th>#</th><th>Nome</th><th>Sala</th><th>Chances</th></tr></thead><tbody>
+        ${ranking.map((p,i)=>`<tr><td class="${i===0?'rank-1':''}">${i+1}</td><td class="${i===0?'rank-1':''}">${escapeHtml(p.name)}</td><td>${escapeHtml(p.sala)}</td><td class="${i===0?'rank-1':''}">${p.saldo}</td></tr>`).join('')}
+      </tbody></table>` : '<p class="hint">Ainda não há participantes cadastrados.</p>'}
+    </div>
+  `;
+
+  const settingsHtml = `
+    <div class="card">
+      <h2>Configurações</h2>
+      <label>Saldo inicial de chances por participante novo</label>
+      <div class="row">
+        <input type="number" id="initial-saldo" min="0" value="${initialSaldoVal !== null ? initialSaldoVal : state.config.initialSaldo}" />
+        <button class="btn btn-outline" id="btn-save-saldo">Salvar</button>
+      </div>
+      <div class="divider"></div>
+      <button class="btn btn-danger btn-block" id="btn-reset">Reiniciar torneio (apaga tudo, mantém a senha)</button>
+    </div>
+  `;
+
+  return lockCard + (matches.length ? openMatchesHtml : '') + newMatchHtml + finishedHtml + rankingHtml + settingsHtml;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ---------- HANDLERS ----------
+function attachHandlers(){
+  const byId = id => document.getElementById(id);
+
+  if(byId('in-name')) byId('in-name').oninput = e => { loginName = e.target.value; };
+  if(byId('in-sala')) byId('in-sala').oninput = e => { loginSala = e.target.value; };
+  if(byId('admin-pin-input')) byId('admin-pin-input').oninput = e => { adminPinVal = e.target.value; };
+  if(byId('new-pair-a')) byId('new-pair-a').oninput = e => { newPairA = e.target.value; };
+  if(byId('new-pair-b')) byId('new-pair-b').oninput = e => { newPairB = e.target.value; };
+  if(byId('initial-saldo')) byId('initial-saldo').oninput = e => { initialSaldoVal = e.target.value; };
+
+  document.querySelectorAll('input[id^="bet-amount-"]').forEach(el => {
+    const mid = parseInt(el.id.replace('bet-amount-',''), 10);
+    el.oninput = e => { betAmountByMatch[mid] = e.target.value; };
+  });
+
+  if(byId('btn-login')){
+    byId('btn-login').onclick = async () => {
+      if(submittingGlobal['login']) return;
+      const name = byId('in-name').value.trim();
+      const sala = byId('in-sala').value.trim();
+      if(!name || !sala){ loginMsg = 'Preencha nome e sala.'; render(); return; }
+      submittingGlobal['login'] = true;
+      byId('btn-login').disabled = true;
+      try{
+        await loadState();
+        const key = keyFor(name, sala);
+        if(!state.participants[key]){
+          state.participants[key] = { name, sala, saldo: state.config.initialSaldo, history: [] };
+          await saveState();
+        }
+        session = { key, name: state.participants[key].name, sala: state.participants[key].sala };
+        loginMsg = '';
+        loginName = ''; loginSala = '';
+        startPolling();
+      } finally {
+        submittingGlobal['login'] = false;
+        render();
+      }
+    };
+  }
+
+  document.querySelectorAll('.pair-box[data-pair]').forEach(el => {
+    el.onclick = () => {
+      if(state.config.betsLocked) return;
+      const mid = parseInt(el.getAttribute('data-match-id'), 10);
+      if(submittingByMatch[mid]) return;
+      selectedPairByMatch[mid] = el.getAttribute('data-pair');
+      betMsgByMatch[mid] = '';
+      render();
+    };
+  });
+
+  document.querySelectorAll('[data-bet-match-id]').forEach(el => {
+    el.onclick = async () => {
+      const mid = parseInt(el.getAttribute('data-bet-match-id'), 10);
+      // trava contra clique duplo: se já tem um envio em andamento pra esse confronto, ignora
+      if(submittingByMatch[mid]) return;
+      const amountEl = byId('bet-amount-' + mid);
+      const amount = parseInt(amountEl.value, 10);
+      const sel = selectedPairByMatch[mid];
+      if(!sel){ betMsgByMatch[mid] = 'Escolha uma dupla primeiro.'; render(); return; }
+      if(!amount || amount <= 0){ betMsgByMatch[mid] = 'Digite uma quantidade válida de chances.'; render(); return; }
+
+      submittingByMatch[mid] = true;
+      el.disabled = true; // feedback imediato pro dedo apressado no celular
+      el.textContent = 'Enviando...';
+
+      try{
+        await loadState();
+        if(state.config.betsLocked){ betMsgByMatch[mid] = 'A torcida está pausada pela organização.'; return; }
+        const p = state.participants[session.key];
+        const m = state.matches.find(x => x.id === mid && x.status === 'open');
+        if(!m){ betMsgByMatch[mid] = 'Esse confronto foi encerrado.'; selectedPairByMatch[mid]=null; return; }
+        if(amount > p.saldo){ betMsgByMatch[mid] = 'Você não tem chances suficientes.'; return; }
+        p.saldo -= amount;
+        state.bets.push({ matchId: m.id, key: session.key, pair: sel, amount, ts: Date.now() });
+        if(sel === 'A') m.poolA += amount; else m.poolB += amount;
+        await saveState();
+        betMsgByMatch[mid] = '✓ Torcida registrada! Aguarde o resultado do confronto.';
+        selectedPairByMatch[mid] = null;
+        betAmountByMatch[mid] = '';
+      } finally {
+        submittingByMatch[mid] = false;
+        render();
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-dismiss-results]').forEach(el => {
+    el.onclick = async () => {
+      const type = el.getAttribute('data-dismiss-results');
+      el.disabled = true;
+      await loadState();
+      const p = state.participants[session.key];
+      if(p && Array.isArray(p.history)){
+        p.history.forEach(h => { if(!h.seen && h.result === type) h.seen = true; });
+      }
+      await saveState();
+      render();
+    };
+  });
+
+  if(byId('btn-admin-unlock')){
+    byId('btn-admin-unlock').onclick = async () => {
+      if(submittingGlobal['admin-unlock']) return;
+      const val = byId('admin-pin-input').value.trim();
+      if(!val){ adminMsg = 'Digite uma senha.'; render(); return; }
+      submittingGlobal['admin-unlock'] = true;
+      try{
+        await loadState();
+        if(state.config.adminPin === val){
+          adminUnlocked = true;
+          adminMsg = '';
+          adminPinVal = '';
+          startPolling();
+        } else {
+          adminMsg = 'Senha incorreta.';
+        }
+      } finally {
+        submittingGlobal['admin-unlock'] = false;
+        render();
+      }
+    };
+  }
+
+  if(byId('btn-toggle-lock')){
+    byId('btn-toggle-lock').onclick = async () => {
+      if(submittingGlobal['toggle-lock']) return;
+      submittingGlobal['toggle-lock'] = true;
+      try{
+        await loadState();
+        state.config.betsLocked = !state.config.betsLocked;
+        await saveState();
+      } finally {
+        submittingGlobal['toggle-lock'] = false;
+        render();
+      }
+    };
+  }
+
+  if(byId('btn-open-match')){
+    byId('btn-open-match').onclick = async () => {
+      if(submittingGlobal['open-match']) return;
+      const a = byId('new-pair-a').value.trim();
+      const b = byId('new-pair-b').value.trim();
+      newPairA = a; newPairB = b;
+      if(!a || !b){ adminMsg = 'Digite o nome das duas duplas.'; render(); return; }
+      submittingGlobal['open-match'] = true;
+      try{
+        await loadState();
+        const id = state.config.nextMatchId++;
+        state.matches.push({ id, pairA: a, pairB: b, status: 'open', winner: null, poolA: 0, poolB: 0 });
+        await saveState();
+        newPairA=''; newPairB=''; adminMsg='';
+      } finally {
+        submittingGlobal['open-match'] = false;
+        render();
+      }
+    };
+  }
+
+  document.querySelectorAll('[data-close-winner]').forEach(el => {
+    el.onclick = async () => {
+      const winner = el.getAttribute('data-close-winner');
+      const mid = parseInt(el.getAttribute('data-match-id'), 10);
+      const busyKey = 'close-' + mid;
+      if(submittingGlobal[busyKey]) return;
+      submittingGlobal[busyKey] = true;
+      try{
+        await loadState();
+        const m = state.matches.find(x => x.id === mid && x.status === 'open');
+        if(!m) { return; }
+        const bets = state.bets.filter(b => b.matchId === m.id);
+        const poolWinner = winner === 'A' ? m.poolA : m.poolB;
+        const poolLoser = winner === 'A' ? m.poolB : m.poolA;
+        bets.forEach(b => {
+          const p = state.participants[b.key];
+          if(!p) return;
+          if(!Array.isArray(p.history)) p.history = [];
+          let result, payout;
+          if(b.pair === winner){
+            const share = poolWinner > 0 ? (b.amount / poolWinner) * poolLoser : 0;
+            payout = b.amount + Math.round(share);
+            p.saldo += payout;
+            result = 'won';
+          } else if(poolWinner === 0){
+            // ninguém torceu para a dupla vencedora: devolve as chances de quem torceu na perdedora
+            payout = b.amount;
+            p.saldo += payout;
+            result = 'refund';
+          } else {
+            payout = 0;
+            result = 'lost';
+          }
+          p.history.push({
+            id: m.id + '-' + b.key + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
+            matchId: m.id,
+            pairA: m.pairA,
+            pairB: m.pairB,
+            myPair: b.pair,
+            winnerPair: winner,
+            amount: b.amount,
+            payout,
+            result,
+            ts: Date.now(),
+            seen: false
+          });
+        });
+        m.status = 'closed';
+        m.winner = winner;
+        await saveState();
+        delete selectedPairByMatch[mid];
+        delete betAmountByMatch[mid];
+        delete betMsgByMatch[mid];
+      } finally {
+        submittingGlobal[busyKey] = false;
+        render();
+      }
+    };
+  });
+
+  if(byId('btn-save-saldo')){
+    byId('btn-save-saldo').onclick = async () => {
+      if(submittingGlobal['save-saldo']) return;
+      const v = parseInt(byId('initial-saldo').value, 10);
+      if(isNaN(v) || v < 0) return;
+      submittingGlobal['save-saldo'] = true;
+      try{
+        await loadState();
+        state.config.initialSaldo = v;
+        await saveState();
+        initialSaldoVal = null;
+      } finally {
+        submittingGlobal['save-saldo'] = false;
+        render();
+      }
+    };
+  }
+
+  if(byId('btn-reset')){
+    byId('btn-reset').onclick = async () => {
+      if(!confirm('Isso vai apagar TODOS os participantes, torcidas e confrontos (a senha do admin é mantida). Continuar?')) return;
+      if(submittingGlobal['reset']) return;
+      submittingGlobal['reset'] = true;
+      try{
+        await loadState();
+        const keepPin = state.config.adminPin;
+        state = defaultState();
+        state.config.adminPin = keepPin || DEFAULT_ADMIN_PIN;
+        await saveState();
+      } finally {
+        submittingGlobal['reset'] = false;
+        render();
+      }
+    };
+  }
+}
+
+// ---------- TABS & POLLING ----------
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTab = btn.getAttribute('data-tab');
+    adminMsg=''; loginMsg='';
+    render();
+  };
+});
+
+let pollTimer = null;
+function isTypingInApp(){
+  const el = document.activeElement;
+  if(!el) return false;
+  const app = document.getElementById('app');
+  const isField = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA';
+  return isField && app && app.contains(el);
+}
+function startPolling(){
+  if(pollTimer) return;
+  pollTimer = setInterval(async () => {
+    await loadState();
+    if(isTypingInApp()) return; // não interrompe quem está digitando
+    render();
+  }, 4000);
+}
+
+(async function init(){
+  await loadState();
+  render();
+  startPolling();
+})();
+</script>
 </body>
 </html>
